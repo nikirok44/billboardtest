@@ -1,89 +1,133 @@
-:root {
-    /* масштаб от ширины (макет 900px) */
-    --ui-scale: clamp(0.38, calc(100vw / 900), 0.90);
+:root{
+  /* масштаб от ширины (макет 900px) */
+  --ui-scale: clamp(0.38, calc(100vw / 900), 0.90);
 
-    /* Отступ кнопок от края экрана (это двигает links!) */
-    --edge-space: clamp(18px, calc(60px * var(--ui-scale)), 300px);
+  /* Отступ title -> links */
+  --title-bottom-gap: clamp(25px, 4vw, 36px);
 
-    /* Padding bottom (двигает title слева/справа) */
-    --bottom-pad-x: clamp(var(--pad-x), calc(92px * var(--ui-scale)), 120px);
+  /* Сдвиг title вправо */
+  --title-shift-x: clamp(20px, 2vw, 30px);
 
-    /* Gap между кнопками */
-    --links-gap-scaled: clamp(10px, calc(78px * var(--ui-scale)), 26px);
+  /* =========================
+     LINE LAYER: привязка к низу как у bottom,
+     но слой растянут вверх до верха экрана
+     ========================= */
 
-    /* Отступ title -> links */
-    --title-bottom-gap: clamp(25px, 4vw, 36px);
-    /* 🔧 СДВИГ TITLE ВПРАВО */
-    --title-shift-x: clamp(20px, 2vw, 30px);
+  /* ✅ основная ручка: сдвиг линии относительно якоря снизу
+     больше = выше, меньше/отрицательное = ниже */
+  --line-from-bottom: 20px;
+
+  /* ширина линии (можно шире экрана) */
+  --line-w: 160vw;
+
+  /* высота полотна линии (может уходить вверх) */
+  --line-h: 140svh;
 }
 
+/* =========================
+   LINE LAYER (отдельный контейнер)
+   ========================= */
 
-/* НИЗ */
+.line-layer{
+  position: absolute;
+  left: 0;
+  right: 0;
 
-.bottom {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(var(--links-bottom) - 40px);
-    z-index: 11;
-    color: #fff;
+  /* ✅ якорь снизу — такой же как у bottom */
+  bottom: calc(var(--links-bottom) - 40px);
 
-    /* ✅ гарантированно работает всегда */
-    padding-inline: clamp(16px, 8vw, 50px);
+  /* ✅ растягиваем слой вверх */
+  top: 0;
+
+  z-index: 2;           /* ниже .bottom (11), выше фонов */
+  pointer-events: none;
+  overflow: visible;
 }
 
-/* title привязан к левому краю bottom автоматически,
-   потому что padding теперь реальный */
-.title {
-    margin: 0 0 var(--title-bottom-gap) 0;
-    font-weight: 800;
-    font-size: var(--title-size);
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: #fff;
-    text-align: left;
-    /* ✅ СДВИГ ВПРАВО */
-    transform: translateX(var(--title-shift-x));
+/* Линия внутри слоя */
+.line-layer::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* ✅ линия “прижата” к низу слоя, который прибит к низу как bottom */
+  bottom: var(--line-from-bottom);
+
+  width: var(--line-w);
+  height: var(--line-h);
+
+  background: url("../assets/line.png") no-repeat center bottom;
+  background-size: 100% auto;
+
+  opacity: 0.95;
 }
 
-.title span {
-    display: block;
+/* =========================
+   BOTTOM: текст + кнопки
+   ========================= */
+
+.bottom{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--links-bottom) - 40px);
+
+  z-index: 11;
+  color: #fff;
+
+  padding-inline: clamp(16px, 8vw, 50px);
 }
 
-/* ✅ гарантируем отступы кнопок от края экрана тем же padding */
-.links {
-    width: min(var(--links-max), calc(100% - (clamp(16px, 8vw, 50px) * 2)));
-    margin: 0 auto;
+/* Заголовок */
+.title{
+  margin: 0 0 var(--title-bottom-gap) 0;
+  font-weight: 800;
+  font-size: var(--title-size);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-align: left;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    /* расстояние между кнопками тоже скейлим проще */
-    gap: clamp(30px, 5vw, 40px);
+  transform: translateX(var(--title-shift-x));
 }
 
-.tile {
-    width: var(--tile-size);
-    height: var(--tile-size);
-    background: #fff;
-    border-radius: 12px;
+.title span{ display:block; }
 
-    display: grid;
-    place-items: center;
-    text-decoration: none;
+/* Ряд кнопок */
+.links{
+  width: min(var(--links-max), calc(100% - (clamp(16px, 8vw, 50px) * 2)));
+  margin: 0 auto;
 
-    box-shadow: 0 10px 22px rgba(0, 0, 0, .28);
-    transition: transform .12s ease, filter .12s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: clamp(30px, 5vw, 40px);
 }
 
-.tile:active {
-    transform: scale(0.97);
-    filter: brightness(0.96);
+/* Кнопки */
+.tile{
+  width: var(--tile-size);
+  height: var(--tile-size);
+  background: #fff;
+  border-radius: 12px;
+
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+
+  box-shadow: 0 10px 22px rgba(0,0,0,.28);
+  transition: transform .12s ease, filter .12s ease;
 }
 
-.icon {
-    width: calc(var(--tile-size) * 0.82);
-    height: calc(var(--tile-size) * 0.82);
-    display: block;
+.tile:active{
+  transform: scale(0.97);
+  filter: brightness(0.96);
+}
+
+.icon{
+  width: calc(var(--tile-size) * 0.82);
+  height: calc(var(--tile-size) * 0.82);
+  display: block;
 }
