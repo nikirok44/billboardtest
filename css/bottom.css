@@ -1,0 +1,89 @@
+:root {
+    /* масштаб от ширины (макет 900px) */
+    --ui-scale: clamp(0.38, calc(100vw / 900), 0.90);
+
+    /* Отступ кнопок от края экрана (это двигает links!) */
+    --edge-space: clamp(18px, calc(60px * var(--ui-scale)), 300px);
+
+    /* Padding bottom (двигает title слева/справа) */
+    --bottom-pad-x: clamp(var(--pad-x), calc(92px * var(--ui-scale)), 120px);
+
+    /* Gap между кнопками */
+    --links-gap-scaled: clamp(10px, calc(78px * var(--ui-scale)), 26px);
+
+    /* Отступ title -> links */
+    --title-bottom-gap: clamp(25px, 4vw, 36px);
+    /* 🔧 СДВИГ TITLE ВПРАВО */
+    --title-shift-x: clamp(20px, 2vw, 30px);
+}
+
+
+/* НИЗ */
+
+.bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--links-bottom) - 40px);
+    z-index: 11;
+    color: #fff;
+
+    /* ✅ гарантированно работает всегда */
+    padding-inline: clamp(16px, 8vw, 50px);
+}
+
+/* title привязан к левому краю bottom автоматически,
+   потому что padding теперь реальный */
+.title {
+    margin: 0 0 var(--title-bottom-gap) 0;
+    font-weight: 800;
+    font-size: var(--title-size);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: left;
+    /* ✅ СДВИГ ВПРАВО */
+    transform: translateX(var(--title-shift-x));
+}
+
+.title span {
+    display: block;
+}
+
+/* ✅ гарантируем отступы кнопок от края экрана тем же padding */
+.links {
+    width: min(var(--links-max), calc(100% - (clamp(16px, 8vw, 50px) * 2)));
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* расстояние между кнопками тоже скейлим проще */
+    gap: clamp(30px, 5vw, 40px);
+}
+
+.tile {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    background: #fff;
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .28);
+    transition: transform .12s ease, filter .12s ease;
+}
+
+.tile:active {
+    transform: scale(0.97);
+    filter: brightness(0.96);
+}
+
+.icon {
+    width: calc(var(--tile-size) * 0.82);
+    height: calc(var(--tile-size) * 0.82);
+    display: block;
+}

@@ -1,0 +1,38 @@
+/* LOGO (единый SVG) */
+
+.logo {
+    position: absolute;
+    z-index: 10;
+    top: var(--top-offset);
+    left: 0;
+    right: 0;
+
+    padding: 0 var(--pad-x);
+    display: flex;
+    justify-content: center;
+
+    pointer-events: none;
+}
+
+.logo-inner {
+    width: 100%;
+    max-width: 900px;
+    /* можно оставить */
+    display: flex;
+    justify-content: center;
+}
+
+/* сам знак */
+.logo-mark {
+    display: block;
+
+    /* ширина — на весь экран с паддингами */
+    width: 100%;
+    max-width: 900px;
+
+    /* высота — как “1/4 экрана” + ограничения */
+    height: clamp(160px, 26svh, 320px);
+
+    /* важно: не растягиваем криво */
+    object-fit: contain;
+}

@@ -1,0 +1,31 @@
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+    /* требования */
+    --pad-x: 16px;
+
+    /* низ: 73px */
+    --links-bottom: calc(73px + var(--safe-bottom));
+
+    /* верх для лого */
+    --top-offset: calc(28px + var(--safe-top));
+
+    /* общий “якорь” для совмещения bg и flower */
+    --bg-pos-x: 50%;
+    --bg-pos-y: 44%;
+
+    /* линия */
+    --line-top: 50%;
+    --line-width: 100%;
+
+    /* размеры UI */
+    --logo-gap: clamp(8px, 1.4vw, 14px);
+    --title-size: clamp(50px, 9.3vw, 78px);
+    --tile-size: clamp(48px, 13vw, 64px);
+
+    /* блок кнопок */
+    --links-max: 560px;
+    --links-gap: clamp(10px, 3vw, 18px);
+
+}
